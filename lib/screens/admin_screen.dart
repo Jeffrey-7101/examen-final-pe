@@ -7,17 +7,17 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
-  final bt = BluetoothService();
+  //final bt = BluetoothService();
 
   @override
   void initState() {
     super.initState();
-    bt.connect();
+    //bt.connect();
   }
 
   @override
   void dispose() {
-    bt.dispose();
+    //bt.dispose();
     super.dispose();
   }
 

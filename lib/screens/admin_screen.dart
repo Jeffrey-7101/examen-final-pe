@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
 import '../services/bluetooth_service.dart';
 import '../services/auth_service.dart';
-import 'package:provider/provider.dart';
 
 class AdminScreen extends StatefulWidget {
   @override
@@ -47,7 +48,8 @@ class _AdminScreenState extends State<AdminScreen> {
       builder: (_) => AlertDialog(
         title: Text('Permisos requeridos'),
         content: Text(
-          'Esta app necesita Bluetooth y ubicación para conectarse al sensor.',
+          'Esta aplicación necesita permisos de Bluetooth y ubicación\n'
+          'para conectarse al sensor ESP32.',
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancelar')),
@@ -93,7 +95,7 @@ class _AdminScreenState extends State<AdminScreen> {
       builder: (_) => AlertDialog(
         title: Text('Error de conexión'),
         content: Text(
-          'No se encontró "SensorESP32-Team Daniel".\n\n'
+          'No se encontró "SensorESP32".\n\n'
           '• Asegúrate de que el ESP32 esté encendido\n'
           '• Bluetooth activado\n'
           '• Estén cerca el uno del otro',
@@ -126,6 +128,7 @@ class _AdminScreenState extends State<AdminScreen> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Text('Admin – Monitoreo en Vivo'),
+        elevation: 2,
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -133,22 +136,21 @@ class _AdminScreenState extends State<AdminScreen> {
             onPressed: () => context.read<AuthService>().signOut(),
           ),
         ],
-        elevation: 2,
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Estado de la conexión
+              // Estado de Conexión
               Card(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 elevation: 2,
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
-                      // Indicador luminoso
                       Container(
                         width: 16,
                         height: 16,
@@ -179,12 +181,11 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
-
               // Información del dispositivo
               Card(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 elevation: 2,
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -199,26 +200,29 @@ class _AdminScreenState extends State<AdminScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Row(children: [
-                        Icon(Icons.memory, size: 20, color: Colors.grey[700]),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text('Service UUID: 4fafc201‑1fb5‑459e‑8fcc‑c5c9c331914b')),
-                      ]),
+                      Row(
+                        children: [
+                          Icon(Icons.memory, size: 20, color: Colors.grey[700]),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text('Service UUID: 4fafc201‑1fb5‑459e‑8fcc‑c5c9c331914b')),
+                        ],
+                      ),
                       const SizedBox(height: 6),
-                      Row(children: [
-                        Icon(Icons.extension, size: 20, color: Colors.grey[700]),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text('Char UUID: beb5483e‑36e1‑4688‑b7f5‑ea07361b26a8')),
-                      ]),
+                      Row(
+                        children: [
+                          Icon(Icons.extension, size: 20, color: Colors.grey[700]),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text('Char UUID: beb5483e‑36e1‑4688‑b7f5‑ea07361b26a8')),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ),
 
-              const SizedBox(height: 24),
-
-              // Botón de reconexión
-              if (!_isConnected && !_isConnecting)
+              // Botón Reconectar
+              if (!_isConnected && !_isConnecting) ...[
+                const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -231,28 +235,29 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                   ),
                 ),
+              ],
 
-              const SizedBox(height: 32),
-
-              // Ilustración de estado
+              // Estado Visual
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _isConnected ? Icons.bluetooth_connected : Icons.bluetooth_disabled,
-                      size: 72,
-                      color: _isConnected ? primary : Colors.grey[400],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      _isConnected
-                          ? 'Recibiendo datos del ESP32…\nGuardando automáticamente en RTDB'
-                          : 'Esperando conexión con ESP32',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                    ),
-                  ],
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        _isConnected ? Icons.bluetooth_connected : Icons.bluetooth_disabled,
+                        size: 72,
+                        color: _isConnected ? primary : Colors.grey[400],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        _isConnected
+                            ? 'Recibiendo datos del ESP32…\nGuardando automáticamente en RTDB'
+                            : 'Esperando conexión con ESP32',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../models/device_data.dart';
+import 'device_detail_screen.dart';
 
 class DoctorScreen extends StatelessWidget {
   @override
@@ -76,6 +77,15 @@ class DoctorScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    // NAVEGACIÓN al detalle
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DeviceDetailScreen(data: r),
+                        ),
+                      );
+                    },
                   ),
                 );
               },

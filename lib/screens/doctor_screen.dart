@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../models/device_data.dart';
 
@@ -6,7 +8,18 @@ class DoctorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Doctor - Últimos registros')),
+      appBar: AppBar(
+        title: Text('Doctor - Últimos registros'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            tooltip: 'Cerrar sesión',
+            onPressed: () {
+              context.read<AuthService>().signOut();
+            },
+          ),
+        ],
+      ),
       body: StreamBuilder<List<DeviceData>>(
         stream: DatabaseService().readingsStream(),
         builder: (context, snap) {

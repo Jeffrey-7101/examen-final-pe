@@ -11,9 +11,17 @@ class DeviceData {
 
   factory DeviceData.fromJson(Map<String, dynamic> json) {
     return DeviceData(
-      nombre: json['nombre_device'],
+      nombre: json['nombre_device'] ?? 'SensorESP32',
       valor: (json['valor'] as num).toDouble(),
       timestamp: DateTime.parse(json['timestamp']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nombre_device': nombre,
+      'valor': valor,
+      'timestamp': timestamp.toIso8601String(),
+    };
   }
 }
